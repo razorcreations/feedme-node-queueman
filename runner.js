@@ -1,11 +1,12 @@
 // module: Queueman.Runner
 let fivebeans = require('fivebeans');
 let request = require('request-promise');
-const bugsnag = require('../../src/bugsnag');
 
 module.exports = function (handle) {
 
-	function Runner(handle) {
+	function Runner(handle, errorHandler) {
+		this.errorHandler = errorHandler || (() => {});
+
 		// Builds the handler used by the queue worker
 		this.handler = function () {
 			function MainJobHandler() {
@@ -38,7 +39,7 @@ module.exports = function (handle) {
 							},
 							err => {
 								console.log((new Date).toUTCString() + " Failed to send products to " + payload.callback_url);
-								bugsnag.notify(err);
+								this.errorHandler(err);
 								callback('success');
 							});
 					}else{
@@ -50,7 +51,7 @@ module.exports = function (handle) {
 				}, err => {
 					callback('success');
 					console.log((new Date).toUTCString() + " Job failed, burying job!");
-					bugsnag.notify(err);
+					this.errorHandler(err);
 					// If we have a callback_url send the error
 					if (payload.callback_url) {
 						let options = {
@@ -92,14 +93,14 @@ module.exports = function (handle) {
 			console.log('==== ERROR ====');
 			console.log(err);
 			console.log('==== ERROR END ====');
-			bugsnag.notify(err, { severity: 'error' });
+			this.errorHandler(err);
 		});
 
 		worker.on('warning', (info) => {
 			console.log('==== WARN ====');
 			console.warn(info);
 			console.log('==== END WARN ====');
-			bugsnag.notify(info.error);
+			this.errorHandler(info.error);
 		});
 
 		worker.start('default');
