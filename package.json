@@ -1,0 +1,9 @@
+{
+  "name": "queueman",
+  "main": "index.js",
+  "dependencies": {
+    "fivebeans": "^1.5.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  }
+}
