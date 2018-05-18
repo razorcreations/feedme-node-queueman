@@ -66,6 +66,7 @@ module.exports = function (handle) {
 							console.log((new Date).toUTCString() + " Sent error to "+payload.callback_url);
 						}, err => {
 							console.log((new Date).toUTCString() + " Failed to send error to "+payload.callback_url);
+							this.errorHandler(err);
 						})
 					}
 				});
