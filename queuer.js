@@ -5,6 +5,8 @@ let fivebeans = require('fivebeans');
 
 module.exports = function () {
 
+	const secondsBeforeTimeout = 60 * 10;
+
 	const client = new fivebeans.client('127.0.0.1', 11300);
 
 	// Register client status listeners and connnect to queue
@@ -33,7 +35,7 @@ module.exports = function () {
 
 		return new Promise(function(fulfill, reject) {
 			// Add a new job to the queue
-			client.put(0, 0, 10, JSON.stringify(job), function(err, jobid) {
+			client.put(0, 0, secondsBeforeTimeout, JSON.stringify(job), function(err, jobid) {
 				if(err === null){
 					// Job was added successfully
 					console.log((new Date).toUTCString() + " Added to queue");
