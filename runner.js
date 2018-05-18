@@ -91,6 +91,12 @@ module.exports = function (handle) {
 		}
 		let worker = new fivebeans.worker(options);
 
+		worker.on('info', (info) => {
+			console.log('==== INFO ====');
+			console.log(info);
+			console.log('==== INFO END ====');
+		});
+
 		worker.on('error', (err) => {
 			console.log('==== ERROR ====');
 			console.log(err);
