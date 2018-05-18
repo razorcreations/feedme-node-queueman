@@ -6,6 +6,7 @@ module.exports = function (handle) {
 
 	function Runner(handle, errorHandler) {
 		this.errorHandler = errorHandler || (() => {});
+		const self = this;
 
 		// Builds the handler used by the queue worker
 		this.handler = function () {
@@ -39,7 +40,7 @@ module.exports = function (handle) {
 							},
 							err => {
 								console.log((new Date).toUTCString() + " Failed to send products to " + payload.callback_url);
-								this.errorHandler(err);
+								self.errorHandler(err);
 								callback('success');
 							});
 					}else{
@@ -51,7 +52,7 @@ module.exports = function (handle) {
 				}, err => {
 					callback('success');
 					console.log((new Date).toUTCString() + " Job failed, burying job!");
-					this.errorHandler(err);
+					self.errorHandler(err);
 					// If we have a callback_url send the error
 					if (payload.callback_url) {
 						let options = {
@@ -66,7 +67,7 @@ module.exports = function (handle) {
 							console.log((new Date).toUTCString() + " Sent error to "+payload.callback_url);
 						}, err => {
 							console.log((new Date).toUTCString() + " Failed to send error to "+payload.callback_url);
-							this.errorHandler(err);
+							self.errorHandler(err);
 						})
 					}
 				});
