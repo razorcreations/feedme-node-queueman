@@ -87,7 +87,6 @@ module.exports = function (handle) {
 				mainjob: this.handler()
 			},
 			ignoreDefault: false,
-			timeout: 'None',
 		}
 		let worker = new fivebeans.worker(options);
 
