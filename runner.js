@@ -2,7 +2,7 @@
 let fivebeans = require('fivebeans');
 let request = require('request-promise');
 
-module.exports = function (handle) {
+module.exports = function (handle, errorHandler) {
 
 	function Runner(handle, errorHandler) {
 		this.errorHandler = errorHandler || (() => {});
@@ -114,5 +114,5 @@ module.exports = function (handle) {
 	}
 
 	// Return the class
-	return new Runner(handle);
+	return new Runner(handle, errorHandler);
 }
