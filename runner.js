@@ -59,7 +59,7 @@ module.exports = function (handle, errorHandler) {
 							uri: payload.callback_url,
 							method: 'POST',
 							body: {
-								error: err
+								error: err instanceof Error ? err.message : err,
 							},
 							json: true,
 						};
