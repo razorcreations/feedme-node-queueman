@@ -25,7 +25,7 @@ module.exports = function () {
 	function Queuer() {}
 
 	// Adds a new job to the queue
-	Queuer.prototype.add = function(data) {
+	Queuer.prototype.add = function(data, priority  = 1024) {
 		// Used by the worker
 		let job = {
 			type: "mainjob",
@@ -35,7 +35,7 @@ module.exports = function () {
 
 		return new Promise(function(fulfill, reject) {
 			// Add a new job to the queue
-			client.put(0, 0, secondsBeforeTimeout, JSON.stringify(job), function(err, jobid) {
+			client.put(priority, 0, secondsBeforeTimeout, JSON.stringify(job), function(err, jobid) {
 				if(err === null){
 					// Job was added successfully
 					console.log((new Date).toUTCString() + " Added to queue");
