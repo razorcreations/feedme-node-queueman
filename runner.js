@@ -52,11 +52,15 @@ module.exports = function (handle, errorHandler) {
 					self.errorHandler(err);
 					// If we have a callback_url send the error
 					if (payload.callback_url) {
+						if (typeof err === 'object' && err.message) {
+							err = err.message;
+						}
+
 						let options = {
 							uri: payload.callback_url,
 							method: 'POST',
 							body: {
-								error: err instanceof Error ? err.message : err,
+								error: err,
 							},
 							json: true,
 						};
