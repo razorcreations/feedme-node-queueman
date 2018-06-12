@@ -17,6 +17,7 @@ module.exports = function (handle, errorHandler) {
 			// Called within the fivebeans package
 			MainJobHandler.prototype.work = function (payload, callback) {
 				handle(payload).then(products => {
+					callback('success');
 
 					console.log((new Date).toUTCString() + " Found a job!");
 
@@ -36,30 +37,30 @@ module.exports = function (handle, errorHandler) {
 						console.log((new Date).toUTCString() + " Sending request to: " + payload.callback_url);
 						request.post(options).then(body => {
 								console.log((new Date).toUTCString() + " Job complete!");
-								callback('success');
 							},
 							err => {
 								console.log((new Date).toUTCString() + " Failed to send products to " + payload.callback_url);
 								self.errorHandler(err);
-								callback('success');
 							});
 					}else{
 						// No callback_url so just succeed.
 						console.log((new Date).toUTCString() + " Job complete!");
-						callback('success');
 					}
 
 				}, err => {
-					callback('success');
 					console.log((new Date).toUTCString() + " Job failed, burying job!");
 					self.errorHandler(err);
 					// If we have a callback_url send the error
 					if (payload.callback_url) {
+						if (typeof err === 'object' && err.message) {
+							err = err.message;
+						}
+
 						let options = {
 							uri: payload.callback_url,
 							method: 'POST',
 							body: {
-								error: err
+								error: err,
 							},
 							json: true,
 						};
