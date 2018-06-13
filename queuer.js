@@ -3,11 +3,11 @@ let fivebeans = require('fivebeans');
 // Create a queue client
 
 
-module.exports = function () {
+module.exports = function (host = '127.0.0.1', port = 11300) {
 
 	const secondsBeforeTimeout = 60 * 10;
 
-	const client = new fivebeans.client('127.0.0.1', 11300);
+	const client = new fivebeans.client(host, port);
 
 	// Register client status listeners and connnect to queue
 	client.on('connect', function () {
@@ -16,7 +16,6 @@ module.exports = function () {
 	}).on('error', function (err) {
 		// Connection to the queue failed
 		console.error(err)
-		reject("Queue connection error");
 	}).on('close', function () {
 		// Connection to the queue closed
 		console.log((new Date).toUTCString() + " Queue connection closed")
