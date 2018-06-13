@@ -51,6 +51,7 @@ module.exports = function (handle, errorHandler = (() => {}), host = '127.0.0.1'
 					}
 
 				}, err => {
+					callback('success');
 					console.log((new Date).toUTCString() + " Job failed, burying job!");
 					self.errorHandler(err);
 					// If we have a callback_url send the error
