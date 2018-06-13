@@ -2,10 +2,13 @@
 let fivebeans = require('fivebeans');
 let request = require('request-promise');
 
-module.exports = function (handle, errorHandler) {
+module.exports = function (handle, errorHandler = (() => {}), host = '127.0.0.1', port = 11300) {
 
-	function Runner(handle, errorHandler) {
-		this.errorHandler = errorHandler || (() => {});
+	function Runner(handle, errorHandler, host, port) {
+		this.errorHandler = errorHandler;
+		this.host = host;
+		this.port = port;
+
 		const self = this;
 
 		// Builds the handler used by the queue worker
@@ -48,6 +51,7 @@ module.exports = function (handle, errorHandler) {
 					}
 
 				}, err => {
+					callback('success');
 					console.log((new Date).toUTCString() + " Job failed, burying job!");
 					self.errorHandler(err);
 					// If we have a callback_url send the error
@@ -82,8 +86,8 @@ module.exports = function (handle, errorHandler) {
 	Runner.prototype.run = function () {
 		let options = {
 			id: 'worker_1',
-			host: '127.0.0.1',
-			port: 11300,
+			host: this.host,
+			port: this.port,
 			handlers: {
 				mainjob: this.handler()
 			},
@@ -115,5 +119,5 @@ module.exports = function (handle, errorHandler) {
 	}
 
 	// Return the class
-	return new Runner(handle, errorHandler);
+	return new Runner(handle, errorHandler, host, port);
 }
