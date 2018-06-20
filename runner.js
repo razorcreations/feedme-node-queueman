@@ -115,7 +115,7 @@ module.exports = function (handle, errorHandler = (() => {}), host = '127.0.0.1'
 			this.errorHandler(info.error);
 		});
 
-		worker.start('default');
+		worker.start();
 	}
 
 	// Return the class
