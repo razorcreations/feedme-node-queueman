@@ -1,0 +1,12 @@
+image: node:10
+options:
+  max-time: 5
+pipelines:
+  branches:
+    '{develop,release/*}':
+      - step:
+          caches:
+            - node
+          script:
+            - npm install
+            - npm test
