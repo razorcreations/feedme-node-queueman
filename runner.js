@@ -81,7 +81,7 @@ class Runner {
 	sendStartedCallback(url) {
 		this.log(`Sending started callback to ${url}`);
 
-		return this.sendCallback(url, { started_at: (new Date).toISOString() })
+		this.sendCallback(url, { started_at: (new Date).toISOString() })
 			.then(() => this.log('Sent started callback successfully'))
 			.catch((error) => {
 				this.errorHandler(error);
