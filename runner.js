@@ -47,8 +47,6 @@ class Runner {
 	}
 
 	work(payload, callback) {
-		callback('success');
-
 		const callbackUrl = payload.callback_url;
 
 		if (callbackUrl) {
@@ -57,6 +55,8 @@ class Runner {
 
 		this.handle(payload)
 			.then((products) => {
+				callback('success');
+
 				this.log('Found a job!');
 				this.log(`Found ${products.length} products`);
 
@@ -67,6 +67,8 @@ class Runner {
 				this.log('Job complete!');
 			})
 			.catch((error) => {
+				callback('success');
+
 				this.errorHandler(error);
 				this.log('Job failed, burying job!');
 
