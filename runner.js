@@ -120,7 +120,7 @@ class Runner {
 			method: 'POST',
 			body: data,
 			json: true,
-			timeout: 60 * 3,
+			timeout: (60 * 3) * 1000,
 		});
 	}
 
